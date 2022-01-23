@@ -6,6 +6,10 @@ class UsuarioService extends ApiService{
         super('/api/usuarios')
     } 
 
+    autenticar(object){
+        return this.post('/autenticar', object)
+    }
+
 }
 
 export default UsuarioService

@@ -11,19 +11,23 @@ class ApiService {
     }
 
     post(url, object){
-        return api.post(url, object);
+        const requestUrl = `${this.apiUrl}${url}`
+        return api.post(requestUrl, object);
     }
 
     get(url){
-        return api.get(url);
+        const requestUrl = `${this.apiUrl}${url}`
+        return api.get(requestUrl);
     }
 
     put(url, object){
-        return api.put(url, object);
+        const requestUrl = `${this.apiUrl}${url}`
+        return api.put(requestUrl, object);
     }
 
     delete(url){
-        return api.delete(url);
+        const requestUrl = `${this.apiUrl}${url}`
+        return api.delete(requestUrl);
     }
 }
 
