@@ -2,27 +2,46 @@ import React from "react";
 import Card from "../Component/Card";
 import formGroup from "../Component/formGroup"
 import Button from "../Component/button"
+import {withRouter} from 'react-router-dom'
+import axios from "axios";
 
 class Login extends React.Component{
 
 
     state = {
         email: "",
-        senha: ""
+        senha: "",
+        mensagemErro: null
     }
 
     cadastro = () => {
-        console.log("Email: " + this.state.email);
-        console.log("Senha: " + this.state.senha);
+        console.log(this.state);
+        this.props.history.push('/cadastro-usuario')
     }
+
+    entrar = async () => {
+        axios.post('http://localhost:8080/api/usuarios/autenticar', {
+            email: this.state.email,
+            senha: this.state.senha
+        }).then(response => {
+            localStorage.setItem('usuario_logado', JSON.stringify(response.data))
+            this.props.history.push("/home")
+        }).catch(erro => {
+            this.setState({mensagemErro: erro.response.data})
+        })
+
+    }
+
 
 
     render(){
         return(
-            <div className="container">
-                <div className="row">
+            <div className="row">
                     <div className="col-md-6" style={{position: 'relative', left: '300px'}}>
                         <Card title="Login">
+                            <div className="row">
+                                {this.state.mensagemErro}
+                            </div>
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="bs-component">
@@ -40,7 +59,7 @@ class Login extends React.Component{
                                                         onChange={(e) => this.setState({senha: e.target.value})} />
                                                 </formGroup>
                                                 <br />
-                                                <Button color="btn btn-success">Entrar</Button>
+                                                <Button color="btn btn-success" click={this.entrar}>Entrar</Button>
                                                 <button class="btn btn-danger" style={{marginLeft: '10px'}} type="button" onClick={this.cadastro}>Cadastrar Usuário</button>
                                             </fieldset>
                                         </form>
@@ -50,8 +69,7 @@ class Login extends React.Component{
                         </Card>
                     </div>
                 </div>
-            </div>
-        )
+            )
     }
 
 }

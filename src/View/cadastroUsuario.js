@@ -3,6 +3,7 @@ import Button from "../Component/button";
 import Card from "../Component/Card";
 import FormGroup from "../Component/formGroup";
 import Input from "../Component/input"
+import {withRouter} from 'react-router-dom'
 
 class CadastroUsuario extends React.Component{
 
@@ -18,10 +19,13 @@ class CadastroUsuario extends React.Component{
         
     }
 
+    cancelar = () => {
+        this.props.history.push('/login')
+    }
+
     render(){
         return(
-            <div className="container">
-                <Card title="Cadastro de Usuário">
+            <Card title="Cadastro de Usuário">
                     <div className="row">
                         <div className="col-lg-12">
                             <form>
@@ -48,14 +52,13 @@ class CadastroUsuario extends React.Component{
                                     </FormGroup>
                                     <br />
                                     <Button color="btn btn-success" click={this.teste}>Salvar</Button>
-                                    <Button color="btn btn-danger" style={{marginLeft: '10px'}}>Voltar</Button>
+                                    <Button click={this.cancelar} color="btn btn-danger" style={{marginLeft: '10px'}}>Voltar</Button>
                                 </fieldset>
                             </form>
                         </div>
                     </div>
                 </Card>
-            </div>
-        )
+            )
     }
 
 }
