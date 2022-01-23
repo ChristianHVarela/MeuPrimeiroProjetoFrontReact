@@ -1,6 +1,8 @@
 import React from "react";
 import {withRouter} from 'react-router-dom'
-import axios from "axios";
+import UsuarioService from "../app/service/usuarioService";
+import LocalStorageService from "../app/service/localStorageService";
+
 
 class Home extends React.Component{
 
@@ -10,15 +12,19 @@ class Home extends React.Component{
         saldo: 0
     }
 
+    constructor(){
+        super()
+        this.service = new UsuarioService()
+    }
+
     cadastrar = () => {
         this.props.history.push('/cadastro-usuario')
     }
 
     componentDidMount(){
-        const usuarioLogadoString = localStorage.getItem('usuario_logado')
-        const usuarioLogado = JSON.parse(usuarioLogadoString)
-
-        axios.get(`http://localhost:8080/api/usuarios/saldo/${usuarioLogado.id}`)
+        const usuarioLogado = LocalStorageService.getItem('usuario_logado')
+        
+        this.service.conferirSaldo(usuarioLogado.id)
             .then(response => {
                 this.setState({saldo: response.data})
             }).catch(error =>{
