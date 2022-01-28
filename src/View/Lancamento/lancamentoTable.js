@@ -1,4 +1,5 @@
 import React from "react";
+import currencyFormatter from "currency-formatter";
 
 function LancamentoTable(props){
 
@@ -6,7 +7,7 @@ function LancamentoTable(props){
         return(
             <tr key={option.id}>
                 <th>{option.descricao}</th>
-                <th>{option.valor}</th>
+                <th>{currencyFormatter.format(option.valor, {locale: 'pt-br'})}</th>
                 <th>{option.tipo}</th>
                 <th>{option.mes}</th>
                 <th>{option.status}</th>

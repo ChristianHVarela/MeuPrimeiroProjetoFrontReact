@@ -8,6 +8,8 @@ import SelectMenu from "../Component/selectMenu";
 import LancamentoTable from "./Lancamento/lancamentoTable";
 import LancamentoService from "../app/service/lancamentoService";
 import LocalStorageService from "../app/service/localStorageService";
+import {messageError} from "../Component/toastr"
+
 
 class ConsultaLancamento extends React.Component{
 
@@ -25,36 +27,45 @@ class ConsultaLancamento extends React.Component{
         this.service = new LancamentoService()
     }
 
+    validarCampos(){
+        let msg = []
+        if(!this.state.ano){
+            msg.push('Insira um ano para continuar!')
+        }
+        return msg
+    }
+
     buscar = () => {
+        const msgs = this.validarCampos()
+        if(msgs && msgs.length > 0){
+            msgs.forEach((msg, index) =>{
+                messageError(msg)
+            });
+            return false;
+        }
+        
         const usuarioLogado = LocalStorageService.getItem('usuario_logado')
-        this.setState({idUsuario: usuarioLogado.id})
-        console.log(usuarioLogado)
-        console.log(this.state)
+        const filtro = {
+            descricao: this.state.descricao,
+            mes: this.state.mes,
+            ano: this.state.ano,
+            tipo: this.state.tipo,
+            idUsuario: usuarioLogado.id
+        }
+
+        this.service.consultar(filtro)
+            .then(resposta =>{
+                this.setState({lancamentos: resposta.data})
+            }).catch(error =>{
+                messageError(error.reposta)
+            })
     }
 
 
     render(){
 
-        const months = [
-            {key: 'SELECIONE...', val: ''},
-            {key: 'JANEIRO', val: 1},
-            {key: 'FEVEREIRO', val: 2},
-            {key: 'MARÇO', val: 3},
-            {key: 'ABRIL', val: 4},
-            {key: 'MAIO', val: 5},
-            {key: 'JUNHO', val: 6},
-            {key: 'JULHO', val: 7},
-            {key: 'AGOSTO', val: 8},
-            {key: 'SETEMBRO', val: 9},
-            {key: 'OUTUBRO', val: 10},
-            {key: 'NOVEMBRO', val: 11},
-            {key: 'DEZEMBRO', val: 12}  
-        ]
-        const types = [
-            {key: 'SELECIONE...', val: ''},
-            {key: 'DESPESA', val: 'DESPESA'},
-            {key: 'RECEITA', val: 'RECEITA'}
-        ]
+        const months = this.service.getMeses()
+        const types = this.service.getTipos()
 
 
         return(
