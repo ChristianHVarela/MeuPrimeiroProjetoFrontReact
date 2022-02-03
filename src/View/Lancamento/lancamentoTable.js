@@ -1,6 +1,7 @@
 import React from "react";
 import currencyFormatter from "currency-formatter";
 
+
 function LancamentoTable(props){
 
     const Lancamentos = props.Lancamentos.map(option =>{
@@ -11,7 +12,10 @@ function LancamentoTable(props){
                 <th>{option.tipo}</th>
                 <th>{option.mes}</th>
                 <th>{option.status}</th>
-                <th></th>
+                <th> 
+                    <button className="btn btn-primary" type="button" style={{marginRight: '4px'}} onClick={e => props.editarAction(option.id)} >Editar</button>
+                    <button className="btn btn-danger" type="button" onClick={e => props.abrirConfirmacao(option)} >Excluir</button>
+                </th>
             </tr>
         )
     })

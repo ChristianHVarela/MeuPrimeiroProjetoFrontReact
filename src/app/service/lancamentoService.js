@@ -50,4 +50,9 @@ export default class LancamentoService extends ApiService{
         }
         return this.get(parameters)
     }
+
+    deletar(id){
+        let parameters = `/delete/${id}`
+        return this.delete(parameters)
+    }
 }
